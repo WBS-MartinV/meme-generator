@@ -30,9 +30,20 @@ function App() {
         setMeme(memes[selected]);
     }, [memes, selected]);
 
+    const handleUpload = (event) => {
+        const url = URL.createObjectURL(event.target.files[0]);
+
+        console.log(event.target.files[0])
+
+        setMeme({
+            name: event.target.files[0].name,
+            url
+        })
+    }
+
     return (
         <div className="App">
-            <h1>MEME GENERATOR</h1>
+            <h1>MEME GENERATOR v0.01</h1>
             <input
                 value={topText}
                 onChange={(event) => setTopText(event.target.value)}
@@ -73,8 +84,9 @@ function App() {
                     NEXT
                 </button>
             </div>
-            <input type="file" id="input" multiple></input>
-            Selected meme: {selected + 1}
+
+            <input onChange={handleUpload} type="file" id="input"></input>
+            
             <Meme
                 {...meme}
                 index={selected}

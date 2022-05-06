@@ -20,7 +20,7 @@ const Meme = ({ name, url, id, topText, bottomText, middleText, index }) => {
     return (
         <div>
             <h3>
-                {index + 1}. {name} ({id})
+                {index + 1}. {name}
             </h3>
 
             <button onClick={() => saveImage(domReference.current)}>

@@ -12,7 +12,7 @@ function App() {
     const [bottomText, setBottomText] = useState("Bottom TEXT!!!!");
     const [middleText, setMiddleText] = useState("MIDDLE TEXT!!!!");
 
-    const randomNumber = () => Math.round(Math.random() * 100)
+    const randomNumber = () => Math.round(Math.random() * 100);
 
     useEffect(() => {
         fetch(meme_url)
@@ -27,6 +27,8 @@ function App() {
 
     return (
         <div className="App">
+            <h1>MEME GENERATOR</h1>
+            
             <input
                 value={topText}
                 onChange={(event) => setTopText(event.target.value)}
@@ -44,6 +46,12 @@ function App() {
                 onChange={(event) => setBottomText(event.target.value)}
                 type="text"
             ></input>
+
+            <div className="buttons">
+                <button>PREV</button>
+                <button>RANDOM</button>
+                <button>NEXT</button>
+            </div>
 
             <Meme
                 {...meme}

@@ -1,20 +1,16 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import Meme from "./Meme";
 
 const meme_url = "https://api.imgflip.com/get_memes";
-
-const Meme = ({ name, url, id }) => (
-    <div>
-        <h3>
-            {name} ({id})
-        </h3>
-        <img src={url}></img>
-    </div>
-);
 
 function App() {
     const [memes, setMemes] = useState([]);
     const [meme, setMeme] = useState({});
+
+    const [topText, setTopText] = useState("TOP TEXT!!!!");
+    const [bottomText, setBottomText] = useState("Bottom TEXT!!!!");
+    const [middleText, setMiddleText] = useState("MIDDLE TEXT!!!!");
 
     useEffect(() => {
         fetch(meme_url)
@@ -29,10 +25,30 @@ function App() {
 
     return (
         <div className="App">
-            {Meme(meme)}
-            <Meme name={meme.name} url={meme.url}></Meme>
-            <Meme {...meme}></Meme>
-            {/* {memes.map(Meme)} */}
+            <input
+                value={topText}
+                onChange={(event) => setTopText(event.target.value)}
+                type="text"
+            ></input>
+
+            <input
+                value={middleText}
+                onChange={(event) => setMiddleText(event.target.value)}
+                type="text"
+            ></input>
+            
+            <input
+                value={bottomText}
+                onChange={(event) => setBottomText(event.target.value)}
+                type="text"
+            ></input>
+
+            <Meme
+                {...meme}
+                topText={topText}
+                bottomText={bottomText}
+                middleText={middleText}
+            ></Meme>
         </div>
     );
 }

@@ -28,7 +28,7 @@ function App() {
     return (
         <div className="App">
             <h1>MEME GENERATOR</h1>
-            
+
             <input
                 value={topText}
                 onChange={(event) => setTopText(event.target.value)}
@@ -52,6 +52,8 @@ function App() {
                 <button>RANDOM</button>
                 <button>NEXT</button>
             </div>
+
+            <input type="file" id="input" multiple></input>
 
             <Meme
                 {...meme}

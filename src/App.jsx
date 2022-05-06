@@ -12,6 +12,8 @@ function App() {
     const [bottomText, setBottomText] = useState("Bottom TEXT!!!!");
     const [middleText, setMiddleText] = useState("MIDDLE TEXT!!!!");
 
+    const randomNumber = () => Math.round(Math.random() * 100)
+
     useEffect(() => {
         fetch(meme_url)
             .then((response) => {
@@ -19,7 +21,7 @@ function App() {
             })
             .then((memeData) => {
                 setMemes(memeData.data.memes);
-                setMeme(memeData.data.memes[0]);
+                setMeme(memeData.data.memes[randomNumber()]);
             });
     }, []);
 
@@ -36,7 +38,7 @@ function App() {
                 onChange={(event) => setMiddleText(event.target.value)}
                 type="text"
             ></input>
-            
+
             <input
                 value={bottomText}
                 onChange={(event) => setBottomText(event.target.value)}

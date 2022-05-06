@@ -1,8 +1,8 @@
 
-const Meme = ({ name, url, id, topText, bottomText, middleText }) => (
+const Meme = ({ name, url, id, topText, bottomText, middleText, index }) => (
     <div>
         <h3>
-            {name} ({id})
+            {index + 1}. {name} ({id})
         </h3>
         <div className="meme-wrapper">
             <p className="meme-text top">{topText}</p>

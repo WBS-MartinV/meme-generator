@@ -1,42 +1,40 @@
 import { useRef } from "react";
 import domtoimage from "dom-to-image";
 
-const saveImage = (node) =>
+import Box from "./Box";
+
+const saveImage = node =>
     domtoimage
         .toJpeg(node, { quality: 0.95 })
 
         .then(function (dataUrl) {
             var link = document.createElement("a");
-            link.download = "my-image-name.jpeg";
+            link.download = "meme.jpeg";
             link.href = dataUrl;
             link.click();
         });
 
-const Meme = ({ name, url, id, topText, bottomText, middleText, index }) => {
+const Meme = ({ name, url, width, height, boxes, index }) => {
     const domReference = useRef();
 
-    console.log(domReference.current);
-
     return (
-        <div>
+        <div className="meme">
             <h3>
-                {index + 1}. {name}
+                {index >= 0 && <span>{index + 1}.</span>} {name}
+                <button onClick={() => saveImage(domReference.current)}>
+                    Save
+                </button>
             </h3>
-
-            <button onClick={() => saveImage(domReference.current)}>
-                Save
-            </button>
 
             <div
                 ref={domReference}
                 className="meme-wrapper"
                 style={{
                     backgroundImage: `url(${url})`,
+                    aspectRatio: width + " / " + height,
                 }}
             >
-                <p className="meme-text top">{topText}</p>
-                <p className="meme-text bottom">{middleText}</p>
-                <p className="meme-text bottom">{bottomText}</p>
+                {boxes.map(Box)}
             </div>
         </div>
     );

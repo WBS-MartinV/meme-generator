@@ -3,12 +3,28 @@
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
-.meme-wrapper {
+.wrapper {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    flex-direction: row;
+}
+
+.meme {
+    flex: 2;
+    margin: 5px;
+}
+
+.controls {
+    flex: 1
+}
+
+.meme-wrapper {
+    text-align: left;
+    position: relative;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    height: 60vh;
+    max-height: 85vh;
+    border: 2px solid black;
+    overflow: hidden;
+    margin: auto;
 }

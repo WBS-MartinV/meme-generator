@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import Meme from "./Meme";
+import Meme from "./Components/Meme";
+import Boxes from "./Components/Boxes";
+import Button from "./Components/Button";
+
+import { version } from "../package.json";
+
+document.title += " v" + version;
 
 const meme_url = "https://api.imgflip.com/get_memes";
 
@@ -9,91 +15,97 @@ function App() {
     const [meme, setMeme] = useState({});
     const [selected, setSelected] = useState(0);
 
-    const [topText, setTopText] = useState("TOP TEXT!!!!");
-    const [bottomText, setBottomText] = useState("Bottom TEXT!!!!");
-    const [middleText, setMiddleText] = useState("MIDDLE TEXT!!!!");
+    const [boxes, setBoxes] = useState([]);
 
-    const randomNumber = () => Math.round(Math.random() * 100);
+    const randomNumber = () => Math.round(Math.random() * 99);
 
     useEffect(() => {
         fetch(meme_url)
-            .then((response) => {
+            .then(response => {
                 return response.json();
             })
-            .then((memeData) => {
+            .then(memeData => {
                 setMemes(memeData.data.memes);
-                setMeme(memeData.data.memes[selected]);
+                setSelected(0);
             });
     }, []);
 
+    const buttonData = [
+        {
+            label: "PREV",
+            click(event) {
+                setSelected(selected => selected - 1);
+            },
+            disabled: () => selected <= 0,
+        },
+        {
+            label: "RANDOM",
+            click(event) {
+                setSelected(randomNumber);
+            },
+            disabled: () => false,
+        },
+        {
+            label: "NEXT",
+            click(event) {
+                setSelected(selected => selected + 1);
+            },
+            disabled: () => selected >= 99,
+        },
+    ];
+
     useEffect(() => {
+        if (!memes.length) return;
         setMeme(memes[selected]);
     }, [memes, selected]);
 
-    const handleUpload = (event) => {
+    const handleUpload = event => {
         const url = URL.createObjectURL(event.target.files[0]);
 
-        console.log(event.target.files[0])
+        const img = new Image();
+        img.src = url;
 
-        setMeme({
-            name: event.target.files[0].name,
-            url
-        })
-    }
+        img.onload = function () {
+            setMeme({
+                name: event.target.files[0].name.replace(/\.\w+$/, ""),
+                custom: true,
+                width: this.width,
+                height: this.height,
+                url,
+            });
+        };
+    };
 
     return (
         <div className="App">
-            <h1>MEME GENERATOR v0.01</h1>
-            <input
-                value={topText}
-                onChange={(event) => setTopText(event.target.value)}
-                type="text"
-            ></input>
-            <input
-                value={middleText}
-                onChange={(event) => setMiddleText(event.target.value)}
-                type="text"
-            ></input>
-            <input
-                value={bottomText}
-                onChange={(event) => setBottomText(event.target.value)}
-                type="text"
-            ></input>
-            <div className="buttons">
-                <button
-                    disabled={selected <= 0}
-                    onClick={(event) => {
-                        setSelected((previous) => previous - 1);
-                    }}
-                >
-                    PREV
-                </button>
-                <button
-                    onClick={(event) => {
-                        setSelected(randomNumber());
-                    }}
-                >
-                    RANDOM
-                </button>
-                <button
-                    disabled={selected >= 99}
-                    onClick={(event) => {
-                        setSelected((previous) => previous + 1);
-                    }}
-                >
-                    NEXT
-                </button>
-            </div>
+            {/* <h1>MEME GENERATOR v0.1</h1> */}
 
-            <input onChange={handleUpload} type="file" id="input"></input>
-            
-            <Meme
-                {...meme}
-                index={selected}
-                topText={topText}
-                bottomText={bottomText}
-                middleText={middleText}
-            ></Meme>
+            <div className="wrapper">
+                <Meme {...meme} index={selected} boxes={boxes}></Meme>
+
+                <div className="controls">
+                    <div className="navigation">
+                        <input
+                            type="number"
+                            min={1}
+                            max={100}
+                            value={selected + 1}
+                            onChange={e =>
+                                e.target.value <= 100 &&
+                                setSelected(parseInt(e.target.value) - 1 || 0)
+                            }
+                        />
+                        {buttonData.map(Button)}
+                    </div>
+
+                    <div>
+                        Upload:{" "}
+                        <input onChange={handleUpload} type="file" id="input" />
+                    </div>
+
+                    <Boxes meme={meme} boxes={boxes} setBoxes={setBoxes} />
+                </div>
+            </div>
         </div>
     );
 }
